@@ -1,0 +1,8 @@
+{
+  "name" : "flotExperiment",
+  "dependencies": {
+      "flot-charts": "*",
+      "jquery-flot" : "*"
+      
+  }
+}
