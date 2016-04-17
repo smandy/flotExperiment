@@ -6,14 +6,13 @@ from twisted.internet import reactor
 from twisted.python import log
 
 desc = """One of the things about being a twonk is that no-one really knows
-that one is one, its always down to others to inform one of ones
+that one is one, its always down %(i)s to others to inform one of ones
 twonkness"""
 
 data = []
 for i in range(200):
-    data.append(  { 'name' : 'Wibble %s' % i      , 'description' : desc } )
+    data.append(  { 'name' : 'Wibble %s' % i      , 'description' : desc % locals() } )
     
-
 class MainHandler(cyclone.web.RequestHandler):
     def get(self):
         self.write("Hello, world")

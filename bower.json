@@ -1,5 +1,5 @@
 {
-  "name" : "FlotExperiment",
+  "name" : "flot_experiment",
   "dependencies": {
       "flot-charts": "*",
       "jquery-flot" : "*",
