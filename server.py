@@ -5,21 +5,15 @@ import json
 from twisted.internet import reactor
 from twisted.python import log
 
-desc = """One of the things about being a twonk is that no-one really knows
-that one is one, its always down %(i)s to others to inform one of ones
-twonkness"""
+desc = """olorem ipso factor twonko """ * 20
 
 data = []
-for i in range(200):
-    data.append(  { 'name' : 'Wibble %s' % i      , 'description' : desc % locals() } )
+for i in range(50):
+    data.append(  { 'name' : 'Wibble %s' % i, 'description' : desc % locals() } )
     
-class MainHandler(cyclone.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
-
 class DataHandler(cyclone.web.RequestHandler):
     def get(self):
-        print self.request
+        #print self.request
         # This header gets around CORS
         # https://en.wikipedia.org/wiki/JSONP
         if 1:
@@ -31,11 +25,13 @@ class DataHandler(cyclone.web.RequestHandler):
 
 if __name__ == "__main__":
     application = cyclone.web.Application([
-        (r"/", MainHandler),
-        (r"/data", DataHandler)
+        (r"/", cyclone.web.RedirectHandler, dict(url="angularExperiment.html")),
+        (r"/data", DataHandler),
+        (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
     ])
+    
     log.startLogging(sys.stdout)
-    reactor.listenTCP(8888,
+    reactor.listenTCP(8889,
                       application,
                       interface="127.0.0.1")
     reactor.run()
