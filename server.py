@@ -5,20 +5,14 @@ import json
 from twisted.internet import reactor
 from twisted.python import log
 
-data = [
-    { 'name' : 'Andy'      , 'description' : 'A Person'},
-    { 'name' : 'Fred', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
-    { 'name' : 'Andy'      , 'description' : 'A Person'},
-    { 'name' : 'Fred', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
-    { 'name' : 'Andy'      , 'description' : 'A Person'},
-    { 'name' : 'Fred', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
-    { 'name' : 'Andy'      , 'description' : 'A Person'},
-    { 'name' : 'Fred', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Woahhhh'}
-    ]
+desc = """One of the things about being a twonk is that no-one really knows
+that one is one, its always down to others to inform one of ones
+twonkness"""
+
+data = []
+for i in range(200):
+    data.append(  { 'name' : 'Wibble %s' % i      , 'description' : desc } )
+    
 
 class MainHandler(cyclone.web.RequestHandler):
     def get(self):
