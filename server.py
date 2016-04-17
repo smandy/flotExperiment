@@ -41,7 +41,8 @@ if __name__ == "__main__":
         (r"/", MainHandler),
         (r"/data", DataHandler)
     ])
-
     log.startLogging(sys.stdout)
-    reactor.listenTCP(8888, application, interface="127.0.0.1")
+    reactor.listenTCP(8888,
+                      application,
+                      interface="127.0.0.1")
     reactor.run()
