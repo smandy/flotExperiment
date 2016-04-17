@@ -1,7 +1,5 @@
-angular.module( 'AngularExperiment', []).controller( 'MyController', ['$scope', function($scope) {
-    $scope.heads = [
-        { name : 'Foo'},
-        { name : 'Bar'},
-        { name : 'Baz'}
-    ];
+angular.module( 'AngularExperiment', []).controller( 'MyController', ['$scope', '$http', function($scope, $http) {
+    $http( { method : 'GET', url : 'http://localhost:8888/data'} ).success( function(data) {
+        $scope.heads = data;
+    });
 } ] );

@@ -2,14 +2,38 @@
 <html lang="en" ng-app="AngularExperiment">
 <head>
     <script src="bower_components/angular/angular.js"></script>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
     <script src="app2.js"></script>
 </head>
 <body>
-<div ng-controller="MyController">
-    Woot
-    {{heads}}
-    <div ng-repeat="head in heads">
-        <p>{{head.name}}</p>
+
+<nav class="navbar navbar-static-top navbar-dark bg-inverse">
+    <a class="navbar-brand">My Funky Website</a>
+    <ul class="nav navbar-nav">
+        <li class="nav-item">Foo</li>
+        <li class="nav-item">Bar</li>
+        <li class="nav-item">Baz</li>
+    </ul>
+</nav>
+
+<div class="row">
+<div class="col-sm-2 col-sm-offset-4">
+    <button class="btn btn-primary btn-lg">Click Me!</button>
+</div>
+<div class="col-sm-6">
+</div>
+</div>
+
+<div class="row" ng-controller="MyController">
+    <div class="container">
+        <div class="col-sm-4" ng-repeat="head in heads">
+            <div>
+                <H3>
+                    <i class="glyphicon glyphicon-globe"></i>
+                    {{ head.name}}</H3>
+                <p>{{head.description}}</p>
+            </div>
+        </div>
     </div>
 </div>
 </body>
