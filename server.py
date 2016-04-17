@@ -6,18 +6,18 @@ from twisted.internet import reactor
 from twisted.python import log
 
 data = [
-    { 'name' : 'Andy'      , 'description' : 'Pandy'},
-    { 'name' : 'Puddingham', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Lover'},
-    { 'name' : 'Andy'      , 'description' : 'Pandy'},
-    { 'name' : 'Puddingham', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Lover'},
-    { 'name' : 'Andy'      , 'description' : 'Pandy'},
-    { 'name' : 'Puddingham', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Lover'},
-    { 'name' : 'Andy'      , 'description' : 'Pandy'},
-    { 'name' : 'Puddingham', 'description' : 'Pie'},
-    { 'name' : 'Mantra', 'description' : 'Lover'}
+    { 'name' : 'Andy'      , 'description' : 'A Person'},
+    { 'name' : 'Fred', 'description' : 'Pie'},
+    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
+    { 'name' : 'Andy'      , 'description' : 'A Person'},
+    { 'name' : 'Fred', 'description' : 'Pie'},
+    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
+    { 'name' : 'Andy'      , 'description' : 'A Person'},
+    { 'name' : 'Fred', 'description' : 'Pie'},
+    { 'name' : 'Mantra', 'description' : 'Woahhhh'},
+    { 'name' : 'Andy'      , 'description' : 'A Person'},
+    { 'name' : 'Fred', 'description' : 'Pie'},
+    { 'name' : 'Mantra', 'description' : 'Woahhhh'}
     ]
 
 class MainHandler(cyclone.web.RequestHandler):
