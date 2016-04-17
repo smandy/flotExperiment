@@ -1,8 +1,12 @@
 {
-  "name" : "flotExperiment",
+  "name" : "FlotExperiment",
   "dependencies": {
       "flot-charts": "*",
-      "jquery-flot" : "*"
-      
+      "jquery-flot" : "*",
+      "angular"     : "*",
+      "angular-ui-grid" : "*",
+      "angular-touch" : "*",
+      "angular-animate" : "*",
+      "bootstrap" : "*"
   }
 }

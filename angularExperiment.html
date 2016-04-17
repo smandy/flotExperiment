@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularExperiment">
+<head>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="app2.js"></script>
+</head>
+<body>
+<div ng-controller="MyController">
+    Woot
+    {{heads}}
+    <div ng-repeat="head in heads">
+        <p>{{head.name}}</p>
+    </div>
+</div>
+</body>
+</html>
