@@ -13,14 +13,13 @@ for i in range(50):
     
 class DataHandler(cyclone.web.RequestHandler):
     def get(self):
-        #print self.request
         # This header gets around CORS
         # https://en.wikipedia.org/wiki/JSONP
         if 1:
             self.set_header('Access-Control-Allow-Headers', 'Content-Type')
             self.set_header('Access-Control-Allow-Methods' , 'GET, POST, OPTIONS')
             self.set_header('Access-Control-Allow-Origin' , '*')
-        self.set_header('Content-Type' , 'application/javascript')
+            self.set_header('Content-Type' , 'application/javascript')
         self.write(json.dumps(data))
 
 if __name__ == "__main__":
@@ -29,7 +28,6 @@ if __name__ == "__main__":
         (r"/data", DataHandler),
         (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
     ])
-    
     log.startLogging(sys.stdout)
     reactor.listenTCP(8889,
                       application,

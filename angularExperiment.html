@@ -14,7 +14,6 @@
         <li class="nav-item">Baz</li>
       </ul>
     </nav>
-
     <div class="row">
       <div class="col-sm-1 col-sm-offset-5">
         <button class="btn btn-primary btn-lg">Click Me!</button>
@@ -22,13 +21,12 @@
       <div class="col-sm-6">
       </div>
     </div>
-
     <div class="row" ng-controller="MyController">
       <div class="container">
-        <div class="col-sm-3" ng-repeat="head in heads">
+        <div class="col-sm-4" ng-repeat="head in heads">
           <div class="text-justify">
-              <H4 class="text-center">
-                  <i class="glyphicon glyphicon-plane"></i> {{ head.name}}</H4>
+              <H2 class="text-center">
+                  <i class="glyphicon glyphicon-globe"></i> {{ head.name}}</H2>
             <p><i class="glyphicon glyphicon-certificate"></i> {{head.description}}</p>
           </div>
         </div>
