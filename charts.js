@@ -1,6 +1,36 @@
 angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'DataService',  function ($scope, $timeout, gliffy, DataService) {
     $scope.gliffy = gliffy;
+    
     $scope.messages = [ { counter : 0 } ];
+    
+    $scope.showRow1 = false;
+    $scope.showRow2 = false;
+    $scope.showRow3 = false;
+    $scope.showEmitters  = true;
+    $scope.showEmitters2 = true;
+    $scope.showEmitters3 = true;
+    
+    $scope.emitters = {
+        meh: true,
+        dodgy : true,
+        allIsWell : true,
+        dodgy2 : false,
+        lunch : true,
+        earthQuake : true,
+        disaster : true,
+        flood : true,
+
+        arb1: false,
+        arb2: false,
+        arb3: false,
+        arb4: false,
+    };
+
+    $scope.emitterClass = function(b) {
+        console.log("Chpoink");
+        return b ? "well well-lg col-sm-3 div-200 bg-green" : "well well-lg col-sm-3 div-200 bg-red"; 
+    };
+    
     $scope.options = {
         series: {
             lines: { show: true,
@@ -44,7 +74,6 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
             show: true
         }
     };
-    
 
     $scope.row2Dataset = [{ data: DataService.webData(),
                             backgroundColor : 'black',
@@ -69,14 +98,9 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
         }
     };
     
-    //$scope.dataLength = 0;
-    //$scope.data = DataService.webData();
-    console.log( 'Identity ' + $scope.data === DataService.webData() );
-    
-    
-    $timeout( function() { 
+    $timeout( function() {
         $scope.websocket = new WebSocket('ws://localhost:8889/ws');
-
+        
         $scope.onTimer = function(msg) {
             $scope.addPoint(msg);
         };
@@ -94,6 +118,14 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
             };
         };
 
+        $scope.onEmitter = function(msg) {
+            if ( msg.emitterName in $scope.emitters) {
+                $scope.emitters[msg.emitterName] = msg.emitterValue;
+            } else {
+                console.log( 'Unknown emitter ' + msg.emitterName + ' all i know is ' + $scope.emitters);
+            };
+        };
+
         $scope.onImage = function(msg) {
             // console.log('Image ' + msg.msgs);
             msg.msgs.forEach( $scope.addPoint );
@@ -102,7 +134,8 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
         $scope.dispatch = {
             image : $scope.onImage,
             timer : $scope.onTimer,
-            pong  : $scope.onPong
+            pong  : $scope.onPong,
+            emitter : $scope.onEmitter
         };
 
         $scope.handle = function(msg) {
@@ -131,27 +164,6 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
     $scope.doit = function() {
         $scope.websocket.send( JSON.stringify({ msgType: 'ping' }));
     };
-    
-    $scope.myData = [
-        {
-            "firstName": "Cox",
-            "lastName": "Carney",
-            "company": "Enormo",
-            "employed": true
-        },
-        {
-            "firstName": "Lorraine",
-            "lastName": "Wise",
-            "company": "Comveyer",
-            "employed": false
-        },
-        {
-            "firstName": "Nancy",
-            "lastName": "Waters",
-            "company": "Fuelton",
-            "employed": false
-        }
-    ];
 }]).factory( 'gliffy', [ function() {
     return function(msg) {
         if (msg.msgType=="pong") {

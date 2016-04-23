@@ -5,10 +5,9 @@
       "jquery-flot" : "*",
       "angular"     : "*",
       "angular-bootstrap"     : "*",
-      "angular-ui-grid"     : "*",
+      "bootswatch-dist"    : "3.3.5-darkly",
       "angular-touch"     : "*",
       "angular-animate"     : "*",
-      "cyborg-bootstrap" : "*",
       "angular-flot" : "*",
       "bootstrap" : "*"
   }

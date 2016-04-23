@@ -7,12 +7,6 @@ from twisted.python import log
 from twisted.internet.task import LoopingCall
 
 import random
-desc = """olorem ipso factor twonko """ * 20
-
-data = []
-for i in range(50):
-    data.append(  { 'name' : 'Wibble %s' % i, 'description' : desc % locals() } )
-
 
 class Brownian:
     def __init__(self):
@@ -53,17 +47,30 @@ class Coordinator:
         self.websockets = set()
         self.counter = 0
         self.messages = []
+        
+        self.emitters = {'meh' : True,
+                         'dodgy' : True,
+                         'allIsWell' : True,
+                         'dodgy2' : False,
+                         'lunch' : True,
+                         'earthQuake' : True,
+                         'disaster' : True,
+                         'flood' : True,
+                         'arb1' : True,
+                         'arb2' : True,
+                         'arb3' : True,
+                         'arb4' : True }
 
     def broadcast(self, msg):
         """Jsonify and send message to all websockets"""
         msgString = json.dumps(msg)
-        self.messages.append(msg)
+        #self.messages.append(msg)
         for ws in self.websockets:
             ws.sendMessage(msgString)
         
     def connectionMade(self, ws):
         print "Adding %s" % ws
-        self.websockets.add( ws)
+        self.websockets.add( ws )
         ws.sendMessage( json.dumps( { 'msgType' : 'image',
                                       'data' : getPoint(),
                                       'msgs' : self.messages } ) )
@@ -80,25 +87,22 @@ class Coordinator:
                 'x' : getPoint(),
                 'y' : getPoint(),
                 'counter' : self.counter }
-        self.messages.append( msg )
+        self.broadcast(msg)
+        self.messages.append(msg)
         self.messages = self.messages[-200:]
-        msgString = json.dumps(msg)
-        for ws in self.websockets:
-            ws.sendMessage( msgString )
+
+    def tickleEmitters(self):
+        if True or random.choice( [False] * 5 + [True]):
+            emitter, value = random.choice(self.emitters.items())
+            log.msg("Mutating %s" % emitter)
+            newValue = bool(not value)
+            msg = { 'msgType' : 'emitter',
+                    'emitterName' : emitter,
+                    'emitterValue' : newValue }
+            self.emitters[emitter] = newValue
+            self.broadcast(msg)
         
-class DataHandler(cyclone.web.RequestHandler):
-    def get(self):
-        # This header gets around CORS
-        # https://en.wikipedia.org/wiki/JSONP
-        if 1:
-            self.set_header('Access-Control-Allow-Headers', 'Content-Type')
-            self.set_header('Access-Control-Allow-Methods' , 'GET, POST, OPTIONS')
-            self.set_header('Access-Control-Allow-Origin' , '*')
-            self.set_header('Content-Type' , 'application/javascript')
-        self.write(json.dumps(data))
-
 class TSDataHandler(cyclone.web.RequestHandler):
-
     def initialize(self, coordinator):
         self.coordinator = coordinator
     
@@ -117,7 +121,6 @@ if __name__ == "__main__":
     
     application = cyclone.web.Application([
         (r"/", cyclone.web.RedirectHandler, dict(url="button.html")),
-        (r"/data", DataHandler),
         (r"/ts", TSDataHandler, dict(coordinator = coordinator)),
         (r"/ws"  , WebSocketHandler, dict( coordinator = coordinator)),
         (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
@@ -126,6 +129,11 @@ if __name__ == "__main__":
     reactor.listenTCP(8889,
                       application,
                       interface="127.0.0.1")
-    lc = LoopingCall(coordinator.onTimer)
+    
+    lc  = LoopingCall(coordinator.onTimer)
+    lc2 = LoopingCall(coordinator.tickleEmitters)
+    
     lc.start(0.5)
+    lc2.start(1.5)
+    
     reactor.run()

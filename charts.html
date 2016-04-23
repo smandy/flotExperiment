@@ -6,8 +6,8 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.flot.js"></script>
-    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <!--<link href="bower_components/cyborg-bootstrap/dist/cyborg.bootstrap.css" rel="stylesheet"/> -->
+    <!--<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/> -->
+    <link href="bower_components/bootswatch-dist/css/bootstrap.css" rel="stylesheet"/>
     <link href="bower_components/angular-flot/angular-flot.js"/>
     <link href="examples.css" rel="stylesheet" type="text/css">
 
@@ -18,82 +18,146 @@
     <script src="dataService.js"></script>
     <script src="charts.js"></script>
   </head>
-  <body>
-    <div ng-controller="MainCtrl">
-
-      <div class="container">
-        <div class="row">
-          <button class="btn btn-primary" uib-btn-checkbox ng-model="showOptions">Options</button>
-        </div>
-        <form ng-show="showOptions" class="form-horizontal" role="form">
-          <div class="form-group"> 
-            <div class="col-sm-2">
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="options.series.lines.fill" >Row1 Fill</label>
-              </div>
-            </div>
-          </div>
-            <div class="col-sm-2">
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="row2Options.series.lines.fill" >Row2 Fill</label>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="row3Options.series.lines.fill" >Row3 Fill</label>
-              </div>
-            </div>
-
-            <div class="col-sm-2">
-              {{row2Options.series.lines.fill}}
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="options.series.lines.steps" >Row1 Steps</label>
-              </div>
-            </div>
-
-            <div class="col-sm-2">
-              {{row2Options.series.lines.fill}}
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row2 Steps</label>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              {{row3Options.series.lines.fill}}
-              <div class="checkbox">
-                <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row3 Steps</label>
-              </div>
-            </div>
-
-        </form>
-      </div>
-      <button class="btn btn-primary" type="button" ng-click="doit()">Send Data</button>
-      <div class="container-fluid">
-        <div class="row">
-          <flot dataset="dataset" class="col-sm-12" options="options" height="200px"></flot>
-        </div>
-        <div class="row">
-          <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
-          <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
+  <body ng-controller="MainCtrl">
+    <div class='navbar navbar-static-top'>
+      <div class='container' role='navigation'>
+        <div class='navbar-header'>
+          <a href='index.html' class='navbar-brand'>Monitor</a>
+          <button type='button' class='btn navbar-toggle' ng-model="collapsed">
+            <span class='sr-only'>Toggle navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
         </div>
       </div>
+    </div>
+    <div class="container-fluid">
       <div class="row">
-        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
-        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
-        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+        {{collapsed}}
+        <button class="btn btn-primary" uib-btn-checkbox ng-model="showOptions">Options</button>
+        <button class="btn btn-primary" uib-btn-checkbox ng-model="showDiagnostics">Diagnostics</button>
+        <button class="btn btn-primary" type="button" ng-click="doit()">Send Data</button>
       </div>
-    </div>
-    
-    <div ng-show="false" ng-controller="MainCtrl">
-      <!--<div id="placeholder" class="flot" ></div> -->
-      <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
-      <input class="text" ng-model="minX"></input>
-      <div class="text">{{minX}}</div>
-      <div class="container">
-        <div class="col-sm-1" ng-repeat="msg in messages">
-          <i class="glyphicon {{gliffy(msg)}}"></i>{{msg.counter}}
-          <i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}}
+      
+      <form ng-show="showOptions" class="form-horizontal" role="form">
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="options.series.lines.fill" >Row1 Fill</label>
+          </div>
         </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="row2Options.series.lines.fill" >Row2 Fill</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="row3Options.series.lines.fill" >Row3 Fill</label>
+          </div>
+        </div>
+        
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="options.series.lines.steps" >Row1 Steps</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row2 Steps</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row3 Steps</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showRow1">Show Row1</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showRow2">Show Row 2</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showRow3">Show Row 3</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showEmitters">Show Emitters</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showEmitters2">Show Emitters2</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="checkbox">
+            <label><input type="checkbox" ng-model="showEmitters3">Show Emitters3</label>
+          </div>
+        </div>
+
+      </form>
+
+
+    </div>
+
+    <div class="row" ng-show="showDiagnostics">
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.meh">Meh</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.dodgy">Dodgy</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.allIsWell">All is wekk</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.dodgy2">Dodgy2</button>
+
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.lunch">Lunch</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.earthQuake">Earthquake</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.disaster">Disaster</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.flood">Flood</button>
+
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.arb1">Arb1</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.arb2">Arb2</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.arb3">Arb3</button>
+      <button class="btn btn-primary" uib-btn-checkbox ng-model="emitters.arb4">Arb4</button>
+
+    </div>
+
+    <div class="container-fluid">
+      <div ng-show="showEmitters">
+        <div ng-class="emitterClass(emitters.meh)"><h1 class="display-1 text-center">MEH</h1></div>
+        <div ng-class="emitterClass(emitters.dodgy)"><h1 class="display-1 text-center">DODGY</h1></div>
+        <div ng-class="emitterClass(emitters.allIsWell)"><h1 class="display-1 text-center">ALL IS WELL</h1></div>
+        <div ng-class="emitterClass(emitters.dodgy2)"><h1 class="display-1 text-center">Dodgy2</h1></div>
+      </div>
+      <div ng-show="showEmitters2">
+        <div ng-class="emitterClass(emitters.lunch)"><h1 class="display-1 text-center">LUNCH</h1></div>
+        <div ng-class="emitterClass(emitters.earthQuake)"><h1 class="display-1 text-center">EARTHQUAKE</h1></div>
+        <div ng-class="emitterClass(emitters.disaster)"><h1 class="display-1 text-center">DISASTER</h1></div>
+        <div ng-class="emitterClass(emitters.flood)"><h1 class="display-1 text-center">FLOOD</h1></div>
+      </div>
+      <div ng-show="showEmitters3">
+        <div ng-class="emitterClass(emitters.arb1)"><h1 class="display-1 text-center">ARB1</h1></div>
+        <div ng-class="emitterClass(emitters.arb2)"><h1 class="display-1 text-center">ARB2</h1></div>
+        <div ng-class="emitterClass(emitters.arb3)"><h1 class="display-1 text-center">ARB3</h1></div>
+        <div ng-class="emitterClass(emitters.arb4)"><h1 class="display-1 text-center">ARB4</h1></div>
+      </div>
+      <div ng-show="showRow1" class="row">
+        <flot dataset="dataset" class="col-sm-12" options="options" height="200px"></flot>
+      </div>
+      <div ng-show="showRow2" class="row">
+        <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
+        <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
       </div>
     </div>
+    <div ng-show="showRow3" class="row">
+      <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+      <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+      <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+    </div>
+
   </body>
 </html>
