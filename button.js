@@ -1,4 +1,4 @@
-angular.module('app',[]).controller('MainCtrl', ['$scope', '$timeout', 'gliffy', function ($scope, $timeout, gliffy) {
+angular.module('app', ['angular-flot']).controller('MainCtrl', ['$scope', '$timeout', 'gliffy', function ($scope, $timeout, gliffy) {
 
     $scope.gliffy = gliffy;
     
@@ -121,7 +121,7 @@ angular.module('app',[]).controller('MainCtrl', ['$scope', '$timeout', 'gliffy',
     $scope.doit = function() {
         //alert('Woot ' + $scope.messages);
         //console.log( $scope.messages );
-        $scope.websocket.send( { msgType: 'ping' });
+        $scope.websocket.send( JSON.stringify({ msgType: 'ping' }));
     };
     
     $scope.myData = [

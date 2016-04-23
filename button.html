@@ -3,26 +3,53 @@
   <head>
     <link href="examples.css" rel="stylesheet" type="text/css">
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-bootstrap/angular-bootstrap.js"></script>
+    <script src="bower_components/angular-flot/angular-flot.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.flot.js"></script>
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="bower_components/angular-flot/angular-flot.js"/>
+
+    <!-- Flot Plugins -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.resize.min.js"></script>
+
     
     <script src="button.js"></script>
+    <script src="angularFlotCtrl.js"></script>
   </head>
+  
   <body ng-controller="MainCtrl">
-    
-    <div id="placeholder" class="flot" ></div>
-    <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
+    <div ng-controller="FlotCtrl">
+        <!-- Standard Chart -->
+        <flot dataset="dataset" options="options" height="200px"></flot>
+        <div id="legend" style="width: 200px; height: 200px;"></div>
 
-    <input class="text" ng-model="minX"></input>
-    <div class="text">{{minX}}</div>
-           
-    <div class="container">
-      <div class="col-sm-1 well" ng-repeat="msg in messages">
-        <i class="glyphicon {{gliffy(msg)}}"></i>{{msg.counter}}
-        <!--<i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}} -->
+        <!-- Categories -->
+        <hr>
+        <flot dataset="categoriesDataset" options="categoriesOptions" height="200px"></flot>
+
+        <!-- Pie Chart -->
+        <hr>
+        <flot dataset="pieDataset" options="pieOptions" height="200px"></flot>
+
+        <!-- Events -->
+        <hr>
+        <flot dataset="eventDataset" options="eventOptions" height="200px"
+            on-plot-click="onEventExampleClicked(event, pos, item)"
+            on-plot-hover="onEventExampleHover(event, pos, item)"></flot>
+    </div>
+    <div>
+      <div id="placeholder" class="flot" ></div>
+      <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
+      <input class="text" ng-model="minX"></input>
+      <div class="text">{{minX}}</div>
+      <div class="container">
+        <div class="col-sm-1 well" ng-repeat="msg in messages">
+          <i class="glyphicon {{gliffy(msg)}}"></i>{{msg.counter}}
+          <!--<i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}} -->
+        </div>
       </div>
     </div>
   </body>
