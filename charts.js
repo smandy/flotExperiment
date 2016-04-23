@@ -19,7 +19,6 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
         earthQuake : true,
         disaster : true,
         flood : true,
-
         arb1: false,
         arb2: false,
         arb3: false,
@@ -28,7 +27,8 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
 
     $scope.emitterClass = function(b) {
         console.log("Chpoink");
-        return b ? "well well-lg col-sm-3 div-200 bg-green" : "well well-lg col-sm-3 div-200 bg-red"; 
+        var prefix = "well col-sm-3 div-150 ";
+        return b ? prefix + "bg-green" : prefix + "bg-red";
     };
     
     $scope.options = {

@@ -6,7 +6,6 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.flot.js"></script>
-    <!--<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/> -->
     <link href="bower_components/bootswatch-dist/css/bootstrap.css" rel="stylesheet"/>
     <link href="bower_components/angular-flot/angular-flot.js"/>
     <link href="examples.css" rel="stylesheet" type="text/css">
@@ -19,22 +18,8 @@
     <script src="charts.js"></script>
   </head>
   <body ng-controller="MainCtrl">
-    <div class='navbar navbar-static-top'>
-      <div class='container' role='navigation'>
-        <div class='navbar-header'>
-          <a href='index.html' class='navbar-brand'>Monitor</a>
-          <button type='button' class='btn navbar-toggle' ng-model="collapsed">
-            <span class='sr-only'>Toggle navigation</span>
-            <span class='icon-bar'></span>
-            <span class='icon-bar'></span>
-            <span class='icon-bar'></span>
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="container-fluid">
       <div class="row">
-        {{collapsed}}
         <button class="btn btn-primary" uib-btn-checkbox ng-model="showOptions">Options</button>
         <button class="btn btn-primary" uib-btn-checkbox ng-model="showDiagnostics">Diagnostics</button>
         <button class="btn btn-primary" type="button" ng-click="doit()">Send Data</button>
@@ -102,10 +87,7 @@
             <label><input type="checkbox" ng-model="showEmitters3">Show Emitters3</label>
           </div>
         </div>
-
       </form>
-
-
     </div>
 
     <div class="row" ng-show="showDiagnostics">
