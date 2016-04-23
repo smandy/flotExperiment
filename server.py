@@ -5,6 +5,8 @@ import cyclone.websocket
 from twisted.internet import reactor
 from twisted.python import log
 from twisted.internet.task import LoopingCall
+
+import random
 desc = """olorem ipso factor twonko """ * 20
 
 data = []
@@ -28,7 +30,10 @@ class WebSocketHandler(cyclone.websocket.WebSocketHandler):
         log.msg("got message %s" % message)
         self.coordinator.broadcast({
             'msgType' : 'pong',
-            'counter' : 666
+            'counter' : 666,
+            'x' : random.random(),
+            'y' : random.random(),
+            'data' : random.random()
         })
 
 class Coordinator:
@@ -47,7 +52,8 @@ class Coordinator:
     def connectionMade(self, ws):
         print "Adding %s" % ws
         self.websockets.add( ws)
-        ws.sendMessage( json.dumps( { 'msgType' : 'image' ,
+        ws.sendMessage( json.dumps( { 'msgType' : 'image',
+                                      'data' : random.random(),
                                       'msgs' : self.messages } ) )
 
     def connectionLost(self, ws):
@@ -57,7 +63,11 @@ class Coordinator:
     def onTimer(self, *args):
         self.counter += 1
         log.msg("OnTimer %s" % self.counter)
-        msg = { 'msgType' : 'timer', 'counter' : self.counter }
+        msg = { 'msgType' : 'timer',
+                'data' : random.random(),
+                'x' : random.random(),
+                'y' : random.random(),
+                'counter' : self.counter }
         self.messages.append( msg )
         msgString = json.dumps(msg)
         for ws in self.websockets:

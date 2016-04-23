@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+  <head>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="bower_components/jquery-flot/jquery.js"></script>
+    <script src="bower_components/jquery-flot/jquery.flot.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <scrips src="bower_components/angular-flot/angular-flot.js"/>
+    <script src="flot.js"></script>
+  </head>
+
+  <body>
+    <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
+    <div ng-controller="FlotCtrl">
+      <!-- Standard Chart -->
+      <flot dataset="dataset" options="options" height="480px"></flot>
+      <div id="legend" style="width: 200px; height: 200px;"></div>
+
+      <!-- Categories -->
+      <hr>
+      <flot dataset="categoriesDataset" options="categoriesOptions" height="480px"></flot>
+
+      <!-- Pie Chart -->
+      <hr>
+      <flot dataset="pieDataset" options="pieOptions" height="480px"></flot>
+
+      <!-- Events -->
+      <hr>
+      <flot dataset="eventDataset" options="eventOptions" height="480px"
+            on-plot-click="onEventExampleClicked(event, pos, item)"
+            on-plot-hover="onEventExampleHover(event, pos, item)"></flot>
+    </div>
+  </body>
+</html>

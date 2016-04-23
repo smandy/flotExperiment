@@ -1,12 +1,10 @@
 {
   "name" : "flot_experiment",
   "dependencies": {
-      "flot-charts": "*",
+      "flot": "*",
       "jquery-flot" : "*",
-      "angular"     : "*",
-      "angular-ui-grid" : "*",
-      "angular-touch" : "*",
-      "angular-animate" : "*",
+      "angular"     : "1.2.18",
+      "angular-flot" : "*",
       "bootstrap" : "*"
   }
 }
