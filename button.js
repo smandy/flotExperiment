@@ -1,9 +1,11 @@
-angular.module('app', ['angular-flot']).controller('MainCtrl', ['$scope', '$timeout', 'gliffy', function ($scope, $timeout, gliffy) {
-
+angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'DataService',  function ($scope, $timeout, gliffy, DataService) {
     $scope.gliffy = gliffy;
     
     $scope.messages = [ { counter : 0 } ];
-    $scope.data = [ [0.0,0.0] ];
+
+    $scope.data = DataService.webData();
+
+    //$scope.flot = $controller('FlotCtrl');
     
 	$scope.series = [{
 		data: $scope.data,
@@ -22,6 +24,7 @@ angular.module('app', ['angular-flot']).controller('MainCtrl', ['$scope', '$time
         $scope.onTimer = function(msg) {
             $scope.addPoint(msg);
             $scope.redraw();
+            //$flot.dataset = $scope.data;
         };
 
         $scope.onPong = function(msg) {
@@ -122,6 +125,9 @@ angular.module('app', ['angular-flot']).controller('MainCtrl', ['$scope', '$time
         //alert('Woot ' + $scope.messages);
         //console.log( $scope.messages );
         $scope.websocket.send( JSON.stringify({ msgType: 'ping' }));
+
+        // console.log("Dataset is " + FlotCtrl.dataChart);
+        // console.log("Dataset is " + FlotCtrl.dataset);
     };
     
     $scope.myData = [

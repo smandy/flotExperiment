@@ -16,6 +16,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.resize.min.js"></script>
 
     
+    <script src="dataService.js"></script>
     <script src="button.js"></script>
     <script src="angularFlotCtrl.js"></script>
   </head>
@@ -23,7 +24,7 @@
   <body ng-controller="MainCtrl">
     <div ng-controller="FlotCtrl">
         <!-- Standard Chart -->
-        <flot dataset="dataset" options="options" height="200px"></flot>
+        <flot dataset="dataset" ng-model="dataChart" options="options" height="200px"></flot>
         <div id="legend" style="width: 200px; height: 200px;"></div>
 
         <!-- Categories -->

@@ -1,11 +1,11 @@
 /* global alert */
 /* global angular */
 
-angular.module('app').controller('FlotCtrl', ['$scope', function ($scope) {
+angular.module('app').controller('FlotCtrl', ['$scope','DataService', function ($scope, DataService) {
     //
     // Standard Chart Example
     //
-    $scope.dataset = [{ data: [], yaxis: 1, label: 'sin' }];
+    $scope.dataset = [{ data: DataService.webData(), yaxis: 1, label: 'sin' }];
     $scope.options = {
         legend: {
             container: '#legend',
@@ -13,9 +13,9 @@ angular.module('app').controller('FlotCtrl', ['$scope', function ($scope) {
         }
     };
     
-    for (var i = 0; i < 14; i += 0.5) {
-        $scope.dataset[0].data.push([i, Math.sin(i)]);
-    }
+//    for (var i = 0; i < 14; i += 0.5) {
+//        $scope.dataset[0].data.push([i, Math.sin(i)]);
+//    }
     //
     // Categories Example
     //

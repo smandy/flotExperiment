@@ -91,7 +91,7 @@ if __name__ == "__main__":
     coordinator = Coordinator()
     
     application = cyclone.web.Application([
-        (r"/", cyclone.web.RedirectHandler, dict(url="angularExperiment.html")),
+        (r"/", cyclone.web.RedirectHandler, dict(url="button.html")),
         (r"/data", DataHandler),
         (r"/ws"  , WebSocketHandler, dict( coordinator = coordinator)),
         (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
