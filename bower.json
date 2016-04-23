@@ -3,8 +3,9 @@
   "dependencies": {
       "flot": "*",
       "jquery-flot" : "*",
-      "angular"     : "1.2.18",
+      "angular"     : "*",
       "angular-bootstrap"     : "*",
+      "cyborg-bootstrap" : "*",
       "angular-flot" : "*",
       "bootstrap" : "*"
   }

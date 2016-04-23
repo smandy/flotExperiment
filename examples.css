@@ -2,6 +2,7 @@
 
 body {
 	font: 12px/1.5em "proxima-nova", Helvetica, Arial, sans-serif;
+	background-color : rgba(6, 6, 9, 0.9);
 }
 
 a {	color: #069; }
@@ -15,7 +16,7 @@ h2 {
 h3 {
 	margin-left: 30px;
 	font: normal 14px "omnes-pro", Helvetica, Arial, sans-serif;
-	color: #666;
+	color: rgba(217, 217, 217, 0.92);
 }
 
 p {

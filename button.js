@@ -1,48 +1,102 @@
 angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'DataService',  function ($scope, $timeout, gliffy, DataService) {
     $scope.gliffy = gliffy;
-    
     $scope.messages = [ { counter : 0 } ];
-
-    $scope.data = DataService.webData();
-
-    //$scope.flot = $controller('FlotCtrl');
+    $scope.options = {
+        series: {
+            lines: { show: true,
+                     fill: false,
+                     steps : true,
+                     fillColor: "rgba(0, 255, 255, 0.25)" },
+            points: { show: false, fill: false }
+        },
+        legend: {
+            container: '#legend',
+            show: true
+        }
+    };
     
-	$scope.series = [{
-		data: $scope.data,
-		lines: {
-			fill: true
-		}
-    }];
+    $scope.dataset = [{ data: DataService.webData(),
+                        backgroundColor : 'black',
+                        color : 'cyan',
+                        lineWidth : 1,
+                        //yaxis: 1,
+                        label: 'Woot' }];
+
+    $scope.row3Dataset = [{ data: DataService.webData(),
+                            backgroundColor : 'black',
+                            color : 'lightgreen',
+                            steps : true,
+                            lineWidth : 3,
+                            //yaxis: 1,
+                            label: 'Woot' }];
+
+    $scope.row3Options = {
+        series: {
+            lines: { show: true,
+                     fill: false,
+                     lineWidth : 2,
+                     steps : true,
+                     fillColor: "rgba(0, 255,0, 0.15)" },
+            points: { show: false, fill: false }
+        },
+        legend: {
+            container: '#legend',
+            show: true
+        }
+    };
     
-    $timeout( function() {
-	    var container = $("#placeholder");
 
-        console.log("Container is " + container);
+    $scope.row2Dataset = [{ data: DataService.webData(),
+                            backgroundColor : 'black',
+                            color : 'red',
+                            lineWidth : 3,
+                            steps : true,
+                            //yaxis: 1,
+                            label: 'Woot' }];
 
+    $scope.row2Options = {
+        series: {
+            lines: { show: true,
+                     fill: false,
+                     lineWidth : 3,
+                     steps : true,
+                     fillColor: "rgba(255, 0,0, 0.3)" },
+            points: { show: false, fill: false }
+        },
+        legend: {
+            container: '#legend',
+            show: true
+        }
+    };
+    
+    //$scope.dataLength = 0;
+    //$scope.data = DataService.webData();
+    console.log( 'Identity ' + $scope.data === DataService.webData() );
+    
+    
+    $timeout( function() { 
         $scope.websocket = new WebSocket('ws://localhost:8889/ws');
 
         $scope.onTimer = function(msg) {
             $scope.addPoint(msg);
-            $scope.redraw();
-            //$flot.dataset = $scope.data;
         };
 
         $scope.onPong = function(msg) {
             $scope.addPoint(msg);
-            $scope.redraw();
         };
 
         $scope.addPoint = function(msg) {
+            var data = DataService.webData();
             $scope.messages.push( msg);
-            var x = [ $scope.data.length, msg.data];
-            //console.log('adding ' + x);
-            $scope.data[$scope.data.length] = x;
+            DataService.addPoint(msg.data);
+            if( DataService.length() > 300 ) {
+                DataService.shift();
+            };
         };
 
         $scope.onImage = function(msg) {
             // console.log('Image ' + msg.msgs);
             msg.msgs.forEach( $scope.addPoint );
-            $scope.redraw();
         };
         
         $scope.dispatch = {
@@ -70,64 +124,12 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
         };
 
         $scope.websocket.onopen = function( msg ) {
-            //console.log('Got open ' + msg.data);
+            console.log('Got open ' + msg.data);
         };
-
-        $scope.redraw = function() {
-            // console.log('Redraw ' + $scope.data );
-		    $scope.series[0].data = $scope.data;
-		    $scope.plot.setData($scope.series);
-		    $scope.plot.draw();
-        };
-
-	    $scope.plot = $.plot(container, $scope.data, {
-		    grid: {
-			    borderWidth: 1,
-			    minBorderMargin: 20,
-			    labelMargin: 10,
-			    backgroundColor: {
-				    colors: ["#fff", "#e4f4f4"]
-			    },
-			    margin: {
-				    top: 8,
-				    bottom: 20,
-				    left: 20
-			    },
-			    markings: function(axes) {
-				    var markings = [];
-				    var xaxis = axes.xaxis;
-				    for (var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2) {
-					    markings.push({ xaxis: { from: x, to: x + xaxis.tickSize }, color: "rgba(232, 232, 255, 0.2)" });
-				    }
-				    return markings;
-			    }
-		    },
-		    xaxis: {
-                min : 0,
-                max : 1000,
-			    tickFormatter: function() {
-				    return "";
-			    }
-		    },
-		    yaxis: {
-			    min: 0,
-			    max: 110
-		    },
-		    legend: {
-			    show: true
-		    }
-	    });
-
-        
     });
 
     $scope.doit = function() {
-        //alert('Woot ' + $scope.messages);
-        //console.log( $scope.messages );
         $scope.websocket.send( JSON.stringify({ msgType: 'ping' }));
-
-        // console.log("Dataset is " + FlotCtrl.dataChart);
-        // console.log("Dataset is " + FlotCtrl.dataset);
     };
     
     $scope.myData = [

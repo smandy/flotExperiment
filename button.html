@@ -1,55 +1,99 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
   <head>
-    <link href="examples.css" rel="stylesheet" type="text/css">
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-flot/angular-flot.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.flot.js"></script>
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!--<link href="bower_components/cyborg-bootstrap/dist/cyborg.bootstrap.css" rel="stylesheet"/> -->
     <link href="bower_components/angular-flot/angular-flot.js"/>
+    <link href="examples.css" rel="stylesheet" type="text/css">
 
     <!-- Flot Plugins -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.resize.min.js"></script>
-
-    
     <script src="dataService.js"></script>
     <script src="button.js"></script>
+    <script src="circularBuffer.js"></script>
     <script src="angularFlotCtrl.js"></script>
   </head>
-  
-  <body ng-controller="MainCtrl">
-    <div ng-controller="FlotCtrl">
-        <!-- Standard Chart -->
-        <flot dataset="dataset" ng-model="dataChart" options="options" height="200px"></flot>
-        <div id="legend" style="width: 200px; height: 200px;"></div>
+  <body>
+    <div ng-controller="MainCtrl">
 
-        <!-- Categories -->
-        <hr>
-        <flot dataset="categoriesDataset" options="categoriesOptions" height="200px"></flot>
+      <div class="container">
+        <div class="row">
+          <button class="btn btn-primary" uib-btn-checkbox ng-model="showOptions">Options</button>
+        </div>
+        <form ng-show="showOptions" class="form-horizontal" role="form">
+          <div class="form-group"> 
+            <div class="col-sm-2">
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="options.series.lines.fill" >Row1 Fill</label>
+              </div>
+            </div>
+          </div>
+            <div class="col-sm-2">
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="row2Options.series.lines.fill" >Row2 Fill</label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="row3Options.series.lines.fill" >Row3 Fill</label>
+              </div>
+            </div>
 
-        <!-- Pie Chart -->
-        <hr>
-        <flot dataset="pieDataset" options="pieOptions" height="200px"></flot>
+            <div class="col-sm-2">
+              {{row2Options.series.lines.fill}}
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="options.series.lines.steps" >Row1 Steps</label>
+              </div>
+            </div>
 
-        <!-- Events -->
-        <hr>
-        <flot dataset="eventDataset" options="eventOptions" height="200px"
-            on-plot-click="onEventExampleClicked(event, pos, item)"
-            on-plot-hover="onEventExampleHover(event, pos, item)"></flot>
+            <div class="col-sm-2">
+              {{row2Options.series.lines.fill}}
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row2 Steps</label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              {{row3Options.series.lines.fill}}
+              <div class="checkbox">
+                <label><input type="checkbox" ng-model="row2Options.series.lines.steps" >Row3 Steps</label>
+              </div>
+            </div>
+
+        </form>
+      </div>
+      <button class="btn btn-primary" type="button" ng-click="doit()">Send Data</button>
+      <div class="container-fluid">
+        <div class="row">
+          <flot dataset="dataset" class="col-sm-12" options="options" height="200px"></flot>
+        </div>
+        <div class="row">
+          <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
+          <flot dataset="row2Dataset" class="col-sm-6" options="row2Options" height="300px"></flot>
+        </div>
+      </div>
+      <div class="row">
+        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+        <flot dataset="row3Dataset" class="col-sm-4" options="row3Options" height="200px"></flot>
+      </div>
     </div>
-    <div>
-      <div id="placeholder" class="flot" ></div>
+    
+    <div ng-show="false" ng-controller="MainCtrl">
+      <!--<div id="placeholder" class="flot" ></div> -->
       <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
       <input class="text" ng-model="minX"></input>
       <div class="text">{{minX}}</div>
       <div class="container">
-        <div class="col-sm-1 well" ng-repeat="msg in messages">
+        <div class="col-sm-1" ng-repeat="msg in messages">
           <i class="glyphicon {{gliffy(msg)}}"></i>{{msg.counter}}
-          <!--<i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}} -->
+          <i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}}
         </div>
       </div>
     </div>
