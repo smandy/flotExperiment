@@ -4,6 +4,7 @@
       "flot": "*",
       "jquery-flot" : "*",
       "angular"     : "1.2.18",
+      "angular-bootstrap"     : "*",
       "angular-flot" : "*",
       "bootstrap" : "*"
   }

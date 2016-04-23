@@ -13,6 +13,9 @@ data = []
 for i in range(50):
     data.append(  { 'name' : 'Wibble %s' % i, 'description' : desc % locals() } )
 
+def getPoint():
+    return 100 * random.random()
+    
 class WebSocketHandler(cyclone.websocket.WebSocketHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
@@ -31,9 +34,9 @@ class WebSocketHandler(cyclone.websocket.WebSocketHandler):
         self.coordinator.broadcast({
             'msgType' : 'pong',
             'counter' : 666,
-            'x' : random.random(),
-            'y' : random.random(),
-            'data' : random.random()
+            'x' : getPoint(),
+            'y' : getPoint(),
+            'data' : getPoint()
         })
 
 class Coordinator:
@@ -53,7 +56,7 @@ class Coordinator:
         print "Adding %s" % ws
         self.websockets.add( ws)
         ws.sendMessage( json.dumps( { 'msgType' : 'image',
-                                      'data' : random.random(),
+                                      'data' : getPoint(),
                                       'msgs' : self.messages } ) )
 
     def connectionLost(self, ws):
@@ -64,9 +67,9 @@ class Coordinator:
         self.counter += 1
         log.msg("OnTimer %s" % self.counter)
         msg = { 'msgType' : 'timer',
-                'data' : random.random(),
-                'x' : random.random(),
-                'y' : random.random(),
+                'data' : getPoint(),
+                'x' : getPoint(),
+                'y' : getPoint(),
                 'counter' : self.counter }
         self.messages.append( msg )
         msgString = json.dumps(msg)

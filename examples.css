@@ -80,6 +80,23 @@ input[type=checkbox] {
 	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
 }
 
+.flot {
+	box-sizing: border-box;
+
+    background-color: #63b5f0,
+	width: 600px;
+	height: 300px;
+	padding: 2px 2px 2px 2px;
+	#margin: 15px auto 30px auto;
+	border: 1px solid #ddd;
+	#background: #fff;
+	#background: linear-gradient(#f6f6f6 0, #fff 50px);
+	#background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	#background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	#background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	#background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+}
+
 
 .demo-placeholder {
 	width: 100%;

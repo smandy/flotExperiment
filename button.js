@@ -3,30 +3,49 @@ angular.module('app',[]).controller('MainCtrl', ['$scope', '$timeout', 'gliffy',
     $scope.gliffy = gliffy;
     
     $scope.messages = [ { counter : 0 } ];
+    $scope.data = [ [0.0,0.0] ];
+    
+	$scope.series = [{
+		data: $scope.data,
+		lines: {
+			fill: true
+		}
+    }];
     
     $timeout( function() {
+	    var container = $("#placeholder");
+
+        console.log("Container is " + container);
+
         $scope.websocket = new WebSocket('ws://localhost:8889/ws');
 
         $scope.onTimer = function(msg) {
-            $scope.messages.push( msg );
+            $scope.addPoint(msg);
+            $scope.redraw();
         };
 
         $scope.onPong = function(msg) {
+            $scope.addPoint(msg);
+            $scope.redraw();
+        };
+
+        $scope.addPoint = function(msg) {
             $scope.messages.push( msg);
+            var x = [ $scope.data.length, msg.data];
+            //console.log('adding ' + x);
+            $scope.data[$scope.data.length] = x;
         };
 
         $scope.onImage = function(msg) {
             // console.log('Image ' + msg.msgs);
-            msg.msgs.forEach( function(x) {
-                $scope.messages.push(x);
-            });
+            msg.msgs.forEach( $scope.addPoint );
+            $scope.redraw();
         };
         
         $scope.dispatch = {
             image : $scope.onImage,
             timer : $scope.onTimer,
             pong  : $scope.onPong
-            
         };
 
         $scope.handle = function(msg) {
@@ -50,6 +69,53 @@ angular.module('app',[]).controller('MainCtrl', ['$scope', '$timeout', 'gliffy',
         $scope.websocket.onopen = function( msg ) {
             //console.log('Got open ' + msg.data);
         };
+
+        $scope.redraw = function() {
+            // console.log('Redraw ' + $scope.data );
+		    $scope.series[0].data = $scope.data;
+		    $scope.plot.setData($scope.series);
+		    $scope.plot.draw();
+        };
+
+	    $scope.plot = $.plot(container, $scope.data, {
+		    grid: {
+			    borderWidth: 1,
+			    minBorderMargin: 20,
+			    labelMargin: 10,
+			    backgroundColor: {
+				    colors: ["#fff", "#e4f4f4"]
+			    },
+			    margin: {
+				    top: 8,
+				    bottom: 20,
+				    left: 20
+			    },
+			    markings: function(axes) {
+				    var markings = [];
+				    var xaxis = axes.xaxis;
+				    for (var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2) {
+					    markings.push({ xaxis: { from: x, to: x + xaxis.tickSize }, color: "rgba(232, 232, 255, 0.2)" });
+				    }
+				    return markings;
+			    }
+		    },
+		    xaxis: {
+                min : 0,
+                max : 1000,
+			    tickFormatter: function() {
+				    return "";
+			    }
+		    },
+		    yaxis: {
+			    min: 0,
+			    max: 110
+		    },
+		    legend: {
+			    show: true
+		    }
+	    });
+
+        
     });
 
     $scope.doit = function() {
@@ -87,4 +153,4 @@ angular.module('app',[]).controller('MainCtrl', ['$scope', '$timeout', 'gliffy',
         };
     };
 } ] );;
-      
+

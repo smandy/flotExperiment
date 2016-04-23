@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
   <head>
+    <link href="examples.css" rel="stylesheet" type="text/css">
     <script src="bower_components/angular/angular.js"></script>
-        <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
+    <script src="bower_components/angular-bootstrap/angular-bootstrap.js"></script>
+    <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="bower_components/jquery-flot/jquery.flot.js"></script>
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="bower_components/angular-flot/angular-flot.js"/>
@@ -10,12 +12,17 @@
     <script src="button.js"></script>
   </head>
   <body ng-controller="MainCtrl">
+    
+    <div id="placeholder" class="flot" ></div>
     <button class="btn btn-primary" type="button" ng-click="doit()">Click Me</button>
 
+    <input class="text" ng-model="minX"></input>
+    <div class="text">{{minX}}</div>
+           
     <div class="container">
-      <div class="col-sm-1" ng-repeat="msg in messages">
+      <div class="col-sm-1 well" ng-repeat="msg in messages">
         <i class="glyphicon {{gliffy(msg)}}"></i>{{msg.counter}}
-        <i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}}
+        <!--<i class="glyphicon glyphicon-signal"></i>{{msg.data | number : 2}} -->
       </div>
     </div>
   </body>
