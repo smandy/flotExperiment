@@ -5,6 +5,9 @@
       "jquery-flot" : "*",
       "angular"     : "*",
       "angular-bootstrap"     : "*",
+      "angular-ui-grid"     : "*",
+      "angular-touch"     : "*",
+      "angular-animate"     : "*",
       "cyborg-bootstrap" : "*",
       "angular-flot" : "*",
       "bootstrap" : "*"

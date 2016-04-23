@@ -1,9 +1,8 @@
 var app = angular.module('app', ['ngTouch', 'ui.grid']);
 
-alert('Im running');
+//alert('Im running');
 
 app.controller('MainCtrl', ['$scope', function ($scope) {
-
     $scope.doit = function() {
         console.log('Woot');
     };
