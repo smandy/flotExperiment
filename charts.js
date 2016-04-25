@@ -22,11 +22,11 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
         arb1: false,
         arb2: false,
         arb3: false,
-        arb4: false,
+        arb4: false
     };
 
     $scope.emitterClass = function(b) {
-        console.log("Chpoink");
+        //console.log("Chpoink");
         var prefix = "well col-sm-3 div-150 ";
         return b ? prefix + "bg-green" : prefix + "bg-red";
     };
