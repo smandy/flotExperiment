@@ -89,7 +89,7 @@ class Coordinator:
                 'counter' : self.counter }
         self.broadcast(msg)
         self.messages.append(msg)
-        self.messages = self.messages[-200:]
+        self.messages = self.messages[-400:]
 
     def tickleEmitters(self):
         if True or random.choice( [False] * 5 + [True]):
