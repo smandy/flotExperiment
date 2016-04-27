@@ -17,6 +17,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridGroupingConstants', functi
             { name: 'contract', width: '10%' },
             { name: 'aggressive', width: '7%' },
             { name: 'position', width: '10%' , type: 'number', treeAggregationType: uiGridGroupingConstants.aggregation.COUNT},
+            { name: 'orth', width: '10%' , type: 'number', treeAggregationType: uiGridGroupingConstants.aggregation.COUNT},
             { name: 'total'     ,  type: 'number', cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 if (grid.getCellValue(row,col) < 0) {
                     return 'red';

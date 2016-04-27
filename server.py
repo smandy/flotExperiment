@@ -18,7 +18,7 @@ class Brownian:
 
 b = Brownian()
 getPoint = b.getPoint
-    
+
 class WebSocketHandler(cyclone.websocket.WebSocketHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
