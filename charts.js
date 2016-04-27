@@ -3,12 +3,12 @@ angular.module('app').controller('MainCtrl', ['$scope', '$timeout', 'gliffy', 'D
     
     $scope.messages = [ { counter : 0 } ];
     
-    $scope.showRow1 = false;
+    $scope.showRow1 = true;
     $scope.showRow2 = false;
     $scope.showRow3 = false;
-    $scope.showEmitters  = true;
-    $scope.showEmitters2 = true;
-    $scope.showEmitters3 = true;
+    $scope.showEmitters  = false;
+    $scope.showEmitters2 = false;
+    $scope.showEmitters3 = false;
     
     $scope.emitters = {
         meh: true,

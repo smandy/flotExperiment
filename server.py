@@ -133,7 +133,7 @@ if __name__ == "__main__":
     lc  = LoopingCall(coordinator.onTimer)
     lc2 = LoopingCall(coordinator.tickleEmitters)
     
-    lc.start(0.5)
+    lc.start(1.0)
     lc2.start(1.5)
     
     reactor.run()

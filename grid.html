@@ -9,13 +9,15 @@
     <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
     <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
     
-    <link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.min.css"/>
-    <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
-    <script src="app.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <link href="bower_components/angular-ui-grid/ui-grid.css" rel="stylesheet" type="text/css"/>
+
+        <link href="grid.css" rel="stylesheet" type="text/css"/>
+    <script src="grid.js"></script>
   </head>
   <body>
     <div ng-controller="MainCtrl">
-      <div id="grid1" ui-grid="{ data: myData }" class="grid"></div>
+      <div id="grid1" ui-grid="gridOptions" ui-grid-grouping class="grid"></div>
     </div>
   </body>
 </html>
