@@ -16,10 +16,14 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridGroupingConstants', functi
             { name: 'strat', width: '10%' },
             { name: 'contract', width: '10%' },
             { name: 'aggressive', width: '7%' },
-            { name: 'position', width: '10%' , treeAggregationType: uiGridGroupingConstants.aggregation.COUNT},
-            { name: 'total'     , width : '15%', treeAggregationType: uiGridGroupingConstants.aggregation.SUM },
-            { name: 'unrealised', treeAggregationType: uiGridGroupingConstants.aggregation.SUM , width: '10%' },
-            { name: 'realised', width : '10%', treeAggregationType: uiGridGroupingConstants.aggregation.SUM },
+            { name: 'position', width: '10%' , type: 'number', treeAggregationType: uiGridGroupingConstants.aggregation.COUNT},
+            { name: 'total'     ,  type: 'number', cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                if (grid.getCellValue(row,col) < 0) {
+                    return 'red';
+                }
+            }, width : '20%', treeAggregationType: uiGridGroupingConstants.aggregation.SUM },
+            { name: 'unrealised', type: 'number', treeAggregationType: uiGridGroupingConstants.aggregation.SUM , width: '20%' },
+            { name: 'realised', width : '20%', treeAggregationType: uiGridGroupingConstants.aggregation.SUM },
             { name: 'lastPx', width: '10%' }
         ],
         onRegisterApi: function( gridApi ) {
