@@ -19,6 +19,21 @@ class Brownian:
 b = Brownian()
 getPoint = b.getPoint
 
+class WebSocketPnlTickler(cyclone.websocket.WebSocketHandler):
+    def initialize(self, coordinator):
+        self.coordinator = coordinator
+        self.websockets = set()
+        
+    def connectionMade(self):
+        self.coordinator.newPnl(self )
+        log.msg("ws opened %s" % self)
+
+    def connectionLost(self, reason):
+        log.msg("ws closed %s " % self)
+        self.coordinator.delPnl(self)
+
+        
+
 class WebSocketHandler(cyclone.websocket.WebSocketHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
@@ -32,6 +47,8 @@ class WebSocketHandler(cyclone.websocket.WebSocketHandler):
         log.msg("ws closed %s " % self)
         self.coordinator.connectionLost(self)
 
+
+        
     def messageReceived(self, message):
         log.msg("got message %s" % message)
         self.coordinator.broadcast({
@@ -45,8 +62,15 @@ class WebSocketHandler(cyclone.websocket.WebSocketHandler):
 class Coordinator:
     def __init__(self):
         self.websockets = set()
+        self.pnlWebsockets = set()
         self.counter = 0
         self.messages = []
+
+        self.pnls = json.load( open('pnl.json','r'))
+
+        
+        
+        print "Got %s pnls"
         
         self.emitters = {'meh' : True,
                          'dodgy' : True,
@@ -67,7 +91,21 @@ class Coordinator:
         #self.messages.append(msg)
         for ws in self.websockets:
             ws.sendMessage(msgString)
-        
+    def pnlBroadcast(self, msg):
+        """Jsonify and send message to all websockets"""
+        msgString = json.dumps(msg)
+        #self.messages.append(msg)
+        for ws in self.pnlWebsockets:
+            ws.sendMessage(msgString)
+
+    def newPnl(self, ws):
+        print "Add pnl %s" % ws
+        self.pnlWebsockets.add(ws)
+
+    def delPnl(self, ws):
+        print "Remove pnl %s" % ws
+        self.pnlWebsockets.remove(ws)
+    
     def connectionMade(self, ws):
         print "Adding %s" % ws
         self.websockets.add( ws )
@@ -101,6 +139,20 @@ class Coordinator:
                     'emitterValue' : newValue }
             self.emitters[emitter] = newValue
             self.broadcast(msg)
+
+    def ticklePnls(self):
+        #pnls = []
+        for i in range(10):
+            idx = random.randint( 0, len(self.pnls)-1)
+            pnl = self.pnls[idx]
+            pnl['total'] += random.randint(0,1000) - 500
+            pnl['realised'] += random.randint(0,1000) - 500
+            print "Beep, ", pnl
+            d = { 'msgType' : 'pnl',
+                  'idx' : idx,
+                  'pnl' : pnl }
+            self.pnlBroadcast( d )
+        
         
 class TSDataHandler(cyclone.web.RequestHandler):
     def initialize(self, coordinator):
@@ -123,6 +175,7 @@ if __name__ == "__main__":
         (r"/", cyclone.web.RedirectHandler, dict(url="button.html")),
         (r"/ts", TSDataHandler, dict(coordinator = coordinator)),
         (r"/ws"  , WebSocketHandler, dict( coordinator = coordinator)),
+        (r"/ws_ticklepnl"  , WebSocketPnlTickler, dict( coordinator = coordinator)),
         (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
     ])
     log.startLogging(sys.stdout)
@@ -135,5 +188,9 @@ if __name__ == "__main__":
     
     lc.start(1.0)
     lc2.start(1.5)
+
+    if 'realtime' in sys.argv:
+        lc3 = LoopingCall(coordinator.ticklePnls)
+        lc3.start(1.1)
     
     reactor.run()
