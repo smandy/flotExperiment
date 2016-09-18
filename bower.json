@@ -5,6 +5,7 @@
       "jquery-flot" : "*",
       "angular"     : "*",
       "angular-bootstrap"     : "*",
+      "angular-grid"     : "*",
       "bootswatch-dist"    : "3.3.5-darkly",
       "angular-touch"     : "*",
       "angular-ui-grid" : "*",

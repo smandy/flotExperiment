@@ -68,8 +68,6 @@ class Coordinator:
 
         self.pnls = json.load( open('pnl.json','r'))
 
-        
-        
         print "Got %s pnls"
         
         self.emitters = {'meh' : True,
