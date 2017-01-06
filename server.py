@@ -82,7 +82,7 @@ class Coordinator:
                          'arb2' : True,
                          'arb3' : True,
                          'arb4' : True }
-
+        
     def broadcast(self, msg):
         """Jsonify and send message to all websockets"""
         msgString = json.dumps(msg)
