@@ -88,7 +88,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridGroupingConstants', '$time
                 }
                 return newNode;
             });
-        }
+        };
 
         aggregatesTree = recursiveExtract( $scope.gridApi.grid.treeBase.tree );
 
