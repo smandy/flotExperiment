@@ -1,7 +1,6 @@
-import cyclone.web
 import sys
 import json
-import cyclone.websocket
+import tornado.websocket
 from twisted.internet import reactor
 from twisted.python import log
 from twisted.internet.task import LoopingCall
@@ -19,37 +18,36 @@ class Brownian:
 b = Brownian()
 getPoint = b.getPoint
 
-class WebSocketPnlTickler(cyclone.websocket.WebSocketHandler):
+class WebSocketPnlTickler(tornado.websocket.WebSocketHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
         self.websockets = set()
         
-    def connectionMade(self):
+    def open(self):
         self.coordinator.newPnl(self )
         log.msg("ws opened %s" % self)
 
-    def connectionLost(self, reason):
+    def on_close(self):
         log.msg("ws closed %s " % self)
         self.coordinator.delPnl(self)
 
-        
 
-class WebSocketHandler(cyclone.websocket.WebSocketHandler):
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
         self.websockets = set()
         
-    def connectionMade(self):
+    def open(self):
         self.coordinator.connectionMade(self )
         log.msg("ws opened %s" % self)
 
-    def connectionLost(self, reason):
+    def on_close(self):
         log.msg("ws closed %s " % self)
         self.coordinator.connectionLost(self)
 
 
         
-    def messageReceived(self, message):
+    def on_message(self, message):
         log.msg("got message %s" % message)
         self.coordinator.broadcast({
             'msgType' : 'pong',
@@ -67,9 +65,8 @@ class Coordinator:
         self.messages = []
 
         self.pnls = json.load( open('pnl.json','r'))
-
-        print "Got %s pnls"
         
+        #log.info("Got %s pnls")
         self.emitters = {'meh' : True,
                          'dodgy' : True,
                          'allIsWell' : True,
@@ -88,30 +85,30 @@ class Coordinator:
         msgString = json.dumps(msg)
         #self.messages.append(msg)
         for ws in self.websockets:
-            ws.sendMessage(msgString)
+            ws.write_message(msgString)
     def pnlBroadcast(self, msg):
         """Jsonify and send message to all websockets"""
         msgString = json.dumps(msg)
         #self.messages.append(msg)
         for ws in self.pnlWebsockets:
-            ws.sendMessage(msgString)
+            ws.write_message(msgString)
 
     def newPnl(self, ws):
-        print "Add pnl %s" % ws
+        print("Add pnl %s" % ws)
         self.pnlWebsockets.add(ws)
 
     def delPnl(self, ws):
-        print "Remove pnl %s" % ws
+        print("Remove pnl %s" % ws)
         self.pnlWebsockets.remove(ws)
     
     def connectionMade(self, ws):
-        print "Adding %s" % ws
+        print("Adding %s" % ws)
         self.websockets.add( ws )
-        ws.sendMessage( json.dumps( { 'msgType' : 'image',
-                                      'data' : getPoint(),
-                                      'msgs' : self.messages } ) )
+        ws.write_message( json.dumps( { 'msgType' : 'image',
+                                        'data' : getPoint(),
+                                        'msgs' : self.messages } ) )
     def connectionLost(self, ws):
-        print "Removing %s" % ws
+        print("Removing %s" % ws)
         self.websockets.remove(ws)
 
     def onTimer(self, *args):
@@ -129,7 +126,7 @@ class Coordinator:
 
     def tickleEmitters(self):
         if True or random.choice( [False] * 5 + [True]):
-            emitter, value = random.choice(self.emitters.items())
+            emitter, value = random.choice(list(self.emitters.items()))
             log.msg("Mutating %s" % emitter)
             newValue = bool(not value)
             msg = { 'msgType' : 'emitter',
@@ -145,14 +142,14 @@ class Coordinator:
             pnl = self.pnls[idx]
             pnl['total'] += random.randint(0,1000) - 500
             pnl['realised'] += random.randint(0,1000) - 500
-            print "Beep, ", pnl
+            print(("Beep, ", pnl))
             d = { 'msgType' : 'pnl',
                   'idx' : idx,
                   'pnl' : pnl }
             self.pnlBroadcast( d )
         
         
-class TSDataHandler(cyclone.web.RequestHandler):
+class TSDataHandler(tornado.web.RequestHandler):
     def initialize(self, coordinator):
         self.coordinator = coordinator
     
@@ -168,19 +165,21 @@ class TSDataHandler(cyclone.web.RequestHandler):
         
 if __name__ == "__main__":
     coordinator = Coordinator()
+    from tornado.platform.twisted import TwistedIOLoop
+    TwistedIOLoop().install()
     
-    application = cyclone.web.Application([
-        (r"/", cyclone.web.RedirectHandler, dict(url="button.html")),
+    application = tornado.web.Application([
+        (r"/", tornado.web.RedirectHandler, dict(url="button.html")),
         (r"/ts", TSDataHandler, dict(coordinator = coordinator)),
         (r"/ws"  , WebSocketHandler, dict( coordinator = coordinator)),
         (r"/ws_ticklepnl"  , WebSocketPnlTickler, dict( coordinator = coordinator)),
-        (r'/(.*)' , cyclone.web.StaticFileHandler, { 'path' : '.' } ),
+        (r'/(.*)' , tornado.web.StaticFileHandler, { 'path' : '.' } ),
     ])
     log.startLogging(sys.stdout)
-    reactor.listenTCP(8889,
-                      application,
-                      interface="127.0.0.1")
-    
+    #reactor.listenTCP(8889,
+    #                  application,
+    #                  interface="127.0.0.1")
+    application.listen(8889)
     lc  = LoopingCall(coordinator.onTimer)
     lc2 = LoopingCall(coordinator.tickleEmitters)
     

@@ -109,7 +109,7 @@ app.controller('MainCtrl', ['$scope', '$http', 'uiGridGroupingConstants', '$time
 
         $scope.handle = function(msg) {
             var js = JSON.parse(msg.data);
-            if ( js.msgType in $scope.dispatch) {
+            if (js.msgType in $scope.dispatch) {
                 var target = $scope.dispatch[js.msgType];
                 //console.log("Dispatch to " + target);
                 target(js);
